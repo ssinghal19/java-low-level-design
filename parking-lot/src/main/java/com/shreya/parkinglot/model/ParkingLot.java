@@ -34,6 +34,7 @@ public final class ParkingLot {
                 throw new IllegalArgumentException("Duplicate or null floor");
             }
         }
+
         this.floors = Collections.unmodifiableList(new ArrayList<>(floors));
     }
 
@@ -58,7 +59,11 @@ public final class ParkingLot {
                     );
 
                     activeTickets.put(ticket.getId(), ticket);
-                    parkedRegistrations.put(vehicle.getRegistrationNumber(), ticket.getId());
+                    parkedRegistrations.put(
+                            vehicle.getRegistrationNumber(),
+                            ticket.getId()
+                    );
+
                     return ticket;
                 }
             }
@@ -95,6 +100,15 @@ public final class ParkingLot {
                 }
             }
         }
+
         return count;
+    }
+
+    public synchronized Ticket findActiveTicket(String ticketId) {
+        if (ticketId == null || ticketId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Ticket ID is required");
+        }
+
+        return activeTickets.get(ticketId);
     }
 }
